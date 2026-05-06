@@ -1,163 +1,190 @@
-# AI Mock Interviews – Project Flow
+# Nexus: AI Mock Interviews Platform
 
 ## Overview
 
-This project is an AI-powered mock interview platform built with Next.js, Firebase, and Vapi. It allows users to practice real interview questions, receive instant feedback, and track their progress. The app features authentication, interview generation, real-time voice interviews, and automated feedback.
+Nexus is a modern web application designed to help users prepare for technical interviews through realistic, AI-powered mock interview sessions. The platform offers both automated and manual interview creation, real-time feedback, and a personalized dashboard to track progress and results.
 
----
+## Features
 
-## Main Flow
+- **User Authentication:** Secure sign-up, sign-in, password reset, and session management using Firebase Auth.
+- **Dashboard:** Centralized hub for users to view analytics, create interviews, access feedback, and manage their interview history.
+- **Interview Generation:**
+  - **Manual:** Users can create custom interviews by specifying details via a form.
+  - **Automated (VAPI):** Instantly generate interviews using AI APIs.
+- **Interview Management:**
+  - View all interviews in a modern, filterable table.
+  - Status indicators for completed and pending interviews.
+  - Start interviews directly from the dashboard.
+  - Access feedback for completed interviews.
+- **Feedback System:**
+  - Real-time feedback after each interview session.
+  - Feedback-driven status updates in the dashboard.
+- **Responsive UI:**
+  - Built with Next.js App Router and React.
+  - Modern, accessible design using CSS Modules.
+- **Integration:**
+  - Firebase Firestore for data storage.
+  - Modular component structure for easy maintenance and scalability.
 
-### 1. **Authentication**
+## System Architecture
 
-- Users can sign up or sign in using email and password.
-- Authentication is managed via Firebase Auth.
-- Authenticated users are redirected to the main dashboard; unauthenticated users see the auth pages.
+Nexus is built using a modular, scalable architecture that leverages modern web technologies and cloud services for reliability, security, and performance.
 
-### 2. **Dashboard**
+### High-Level Architecture Diagram
 
-- After login, users see:
-  - **Your Interviews:** List of past interviews with feedback.
-  - **Take Interviews:** List of available or upcoming interviews.
-- Each interview is displayed as a card with role, type, tech stack, and feedback summary.
+```
+graph TD
+    A[User Browser] -->|HTTPS| B[Next.js (Nexus) Frontend]
+    B -->|API Calls| C[Next.js API Routes]
+    C -->|Auth, Data| D[Firebase Auth & Firestore]
+    C -->|AI Interview Generation| E[VAPI/AI Service]
+    D <--> F[Firebase Admin SDK]
+    B -->|Static Assets| G[Public CDN]
+```
 
-### 3. **Interview Generation**
+### Components
 
-- Users can start a new interview by clicking "Start an Interview".
-- The interview generation uses Vapi and AI to create a set of questions based on the selected role, level, and tech stack.
-- The backend (API route) stores the generated interview in Firestore.
+- **Frontend (Next.js/React):**
+  - Renders all user interfaces, handles routing, and manages client-side state.
+  - Communicates with backend API routes for data and actions.
+- **API Layer (Next.js API Routes):**
+  - Handles authentication, interview creation, feedback submission, and data retrieval.
+  - Secures endpoints and validates user permissions.
+- **Authentication (Firebase Auth):**
+  - Manages user sign-up, sign-in, password reset, and session validation.
+- **Database (Firestore):**
+  - Stores user profiles, interviews, feedback, and analytics data.
+  - Real-time updates for dashboard and interview status.
+- **Admin SDK (Firebase Admin):**
+  - Used for privileged server-side operations (e.g., verifying tokens, managing users).
+- **AI/Interview Generation (VAPI/AI Service):**
+  - Integrates with external AI APIs to generate interview questions and simulate interviewers.
+- **Static Assets (CDN/Public):**
+  - Hosts images, stylesheets, and other static resources for fast delivery.
 
-### 4. **Real-Time Interview**
+### Data Flow
 
-- The interview is conducted via a real-time voice conversation using Vapi.
-- The AI interviewer follows a structured flow, asks questions, and listens to user responses.
-- The conversation is transcribed and stored.
+1. **User Authentication:**
+   - User signs up or logs in via the frontend, which communicates with Firebase Auth.
+2. **Interview Creation:**
+   - User initiates interview creation (manual or AI-powered) from the dashboard.
+   - API route validates the request, stores interview data in Firestore, and triggers AI generation if needed.
+3. **Interview Management:**
+   - Dashboard fetches interview data from Firestore in real time.
+   - Status and feedback are updated as interviews are completed.
+4. **Feedback:**
+   - After an interview, feedback is submitted and stored in Firestore.
+   - Dashboard updates to reflect completion status.
 
-### 5. **Feedback Generation**
+### Security & Best Practices
 
-- After the interview, the transcript is sent to an AI model for evaluation.
-- The system generates feedback, including:
-  - Total score
-  - Category-wise scores (Technical, Problem-Solving, etc.)
-  - Strengths and areas for improvement
-  - Final assessment
-- Feedback is saved in Firestore and shown to the user.
+- All API routes are protected and validate user authentication tokens.
+- Firestore security rules restrict data access to authenticated users only.
+- Sensitive operations use the Firebase Admin SDK on the server side.
+- Environment variables are used for all secrets and API keys.
 
-### 6. **Review & Progress**
+## Project Structure
 
-- Users can review feedback for each interview.
-- The dashboard helps users track their progress and identify areas to improve.
+```
+├── app/
+│   ├── (auth)/           # Authentication pages (sign-in, sign-up, reset, etc.)
+│   ├── (root)/           # Main dashboard, interview, and resume pages
+│   ├── about/            # About page
+│   ├── api/              # API routes (e.g., VAPI integration)
+│   ├── globals.css       # Global styles
+│   └── ...
+├── components/
+│   ├── dashboard/        # Dashboard layout, sidebar, content, and sections
+│   ├── landing/          # Landing page components
+│   ├── ui/               # Reusable UI components (button, form, input, etc.)
+│   └── ...
+├── constants/            # App-wide constants
+├── firebase/             # Firebase client and admin setup
+├── lib/                  # Utility and helper functions
+├── public/               # Static assets
+├── types/                # TypeScript type definitions
+├── package.json          # Project dependencies and scripts
+├── tsconfig.json         # TypeScript configuration
+├── next.config.ts        # Next.js configuration
+└── ...
+```
 
----
+## Getting Started
 
-## Key Technologies
+### Prerequisites
 
-- **Next.js (App Router):** Frontend and API routes.
-- **Firebase:** Auth, Firestore database.
-- **Vapi:** Real-time voice AI interviews.
-- **Zod & React Hook Form:** Form validation.
-- **Tailwind CSS:** Styling.
+- Node.js (v18+ recommended)
+- npm or yarn
+- Firebase project (for Auth and Firestore)
 
----
+### Installation
 
-## Folder Structure
+1. **Clone the repository:**
 
-- `app/` – Next.js app directory (pages, layouts, API routes)
-- `components/` – React components (UI, Interview, Auth, etc.)
-- `constants/` – Static data and schemas
-- `firebase/` – Firebase client and admin setup
-- `lib/` – Utility functions and server actions
-- `types/` – TypeScript types and interfaces
-- `public/` – Static assets
+```sh
+git clone <repo-url>
+cd nexus
+```
 
----
+2. **Install dependencies:**
 
-## How It Works
+```sh
+npm install
+# or
+yarn install
+```
 
-1. **User signs up/logs in** → redirected to dashboard.
-2. **User starts an interview** → AI generates questions.
-3. **User takes the interview** (voice chat) → responses are recorded.
-4. **AI analyzes the transcript** → generates structured feedback.
-5. **User reviews feedback** → can repeat to improve skills.
+3. **Configure Firebase:**
 
----
+- Add your Firebase credentials to the environment variables or config files as required in `firebase/client.ts` and `firebase/admin.ts`.
+- Update `firebase.json` as needed.
 
-# In-Depth File-to-File Flow: Interview Start to Report Generation
+4. **Run the development server:**
 
-## 1. Start Interview Button Press
+```sh
+npm run dev
+# or
+yarn dev
+```
 
-- **File:** `app/(root)/page.tsx`
-- **Action:** Renders the "Start an Interview" button (`<Link href="/interview">`). On click, routes to `/interview`.
+5. **Open the app:**
 
-## 2. Interview Generation Page
+- Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
-- **File:** `app/(root)/interview/page.tsx`
-- **Action:** Fetches user (`getCurrentUser`). Renders `<Agent />` with `type="generate"`.
-- **Needs:** User must be authenticated and present in DB. `Agent` expects `userName`, `userId`.
+## Usage
 
-## 3. Agent Component (Interview Generation)
+- **Sign up or log in** to access your Nexus dashboard.
+- **Create interviews** via the dashboard (manual or automated).
+- **Start interviews** and receive real-time feedback.
+- **Track your progress** and review feedback in the "My Interviews" section.
 
-- **File:** `components/Agent.tsx`
-- **Action:** Handles call flow and state. On "Call" button, triggers `handleCall()`. For `type="generate"`, calls `vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {...})`. Listens for events, collects messages.
-- **Needs:**
-  - `NEXT_PUBLIC_VAPI_WEB_TOKEN` and `NEXT_PUBLIC_VAPI_WORKFLOW_ID` set in `.env`.
-  - Vapi SDK initialized in `lib/vapi.sdk.ts`.
-  - `interviewer` object in `constants/index.ts` must be valid and include a prompt/question flow.
-  - Questions must be present and formatted, or agent will not know what to ask.
+## Technologies Used
 
-## 4. Interview Details Page (for Existing Interview)
+- **Next.js** (App Router)
+- **React**
+- **TypeScript**
+- **Firebase (Auth, Firestore, Admin SDK)**
+- **CSS Modules**
+- **Lucide React** (icons)
 
-- **File:** `app/(root)/interview/[id]/page.tsx`
-- **Action:** Fetches interview (`getInterviewById`) and feedback (`getFeedbackByInterviewId`). Renders `<Agent />` with `type="interview"`, passing `questions` and `feedbackId`.
-- **Needs:** Interview must exist in Firestore. Questions must be present and formatted.
+## Folder Details
 
-## 5. Interview Generation API
+- `app/`: Routing, layouts, and main pages.
+- `components/`: UI and dashboard components.
+- `constants/`: Application-wide constants.
+- `firebase/`: Firebase configuration and utilities.
+- `lib/`: Helper functions and utilities.
+- `public/`: Static files and images.
+- `types/`: TypeScript type definitions.
 
-- **File:** `app/api/vapi/generate/route.ts`
-- **Action:** Receives POST with interview params. Uses Gemini AI to generate questions. Stores interview in Firestore.
-- **Needs:** Google AI SDK and Firestore configured. Prompt must be well-formed. Response must be a valid JSON array of questions.
+## Contributing
 
-## 6. Agent Interview Flow
+Contributions to Nexus are welcome! Please open issues or submit pull requests for improvements, bug fixes, or new features.
 
-- **File:** `components/Agent.tsx`
-- **Action:** Collects all messages during call. On call end, triggers feedback generation (`createFeedback`).
+## License
 
-## 7. Feedback Generation
+This project is licensed under the MIT License.
 
-- **File:** `lib/actions/general.action.ts` (`createFeedback`)
-- **Action:** Formats transcript. Calls Gemini AI with prompt and schema (`feedbackSchema`). Stores feedback in Firestore.
-- **Needs:** Transcript must be non-empty and well-structured. AI model must return a valid object. Firestore must be writable.
+## Contact
 
-## 8. Feedback Display
-
-- **File:** `app/(root)/interview/[id]/feedback/page.tsx`
-- **Action:** Fetches interview and feedback. Displays scores, strengths, areas for improvement, and final assessment.
-- **Needs:** Feedback must exist for the interview and user.
-
----
-
-# What Each Step Needs to Work Properly
-
-- **Environment Variables:** `NEXT_PUBLIC_VAPI_WEB_TOKEN`, `NEXT_PUBLIC_VAPI_WORKFLOW_ID`, Firebase and Google AI credentials.
-- **Firestore:** Must be initialized and accessible from both client and server.
-- **Vapi SDK:** Must be correctly initialized and event handlers must be set up.
-- **AI Prompts:** Prompts for question generation and feedback must be clear and match the expected schema.
-- **Questions:** Must be generated and passed to the agent in the correct format.
-- **Transcript:** Must be collected and passed to feedback generation.
-- **Error Handling:** All async calls should handle errors and log them for debugging.
-
----
-
-# Debugging Tips
-
-- If the agent is unaware of content:
-  - Check if questions are being generated and passed to the agent.
-  - Ensure the `interviewer` object in `constants/index.ts` is correct and includes the prompt and question placeholders.
-  - Make sure the Vapi SDK is receiving the correct variables.
-- If things are not working as expected:
-  - Check the browser console and server logs for errors.
-  - Verify all environment variables are set.
-  - Ensure Firestore rules allow read/write for your environment.
-  - Test the API route for question generation independently.
-
----
+For questions, support, or feature requests, please open an issue or contact the maintainer.

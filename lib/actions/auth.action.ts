@@ -41,19 +41,25 @@ export async function signUp(params: SignUpParams) {
     await db.collection("users").doc(uid).set({
       name,
       email,
-      // profileURL,
-      // resumeURL,
+      subscription: "Basic",
+      subscriptionStatus: "active",
+      subscriptionBilling: "monthly",
     });
 
     return {
       success: true,
       message: "Account created successfully. Please sign in.",
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error creating user:", error);
 
     // Handle Firebase specific errors
-    if (error.code === "auth/email-already-exists") {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === "auth/email-already-exists"
+    ) {
       return {
         success: false,
         message: "This email is already in use",
@@ -68,19 +74,28 @@ export async function signUp(params: SignUpParams) {
 }
 
 export async function signIn(params: SignInParams) {
-  const { email, idToken } = params;
+  const { uid, email, name, idToken } = params;
 
   try {
-    const userRecord = await auth.getUserByEmail(email);
-    if (!userRecord)
-      return {
-        success: false,
-        message: "User does not exist. Create an account.",
-      };
+    const userDocRef = db.collection("users").doc(uid);
+    const userRecord = await userDocRef.get();
+    if (!userRecord.exists) {
+      await userDocRef.set({
+        name: name || email.split("@")[0],
+        email,
+        subscription: "Basic",
+        subscriptionStatus: "active",
+        subscriptionBilling: "monthly",
+      });
+    }
 
     await setSessionCookie(idToken);
-  } catch (error: any) {
-    console.log("");
+    return {
+      success: true,
+      message: "Signed in successfully.",
+    };
+  } catch (error: unknown) {
+    console.log(error);
 
     return {
       success: false,

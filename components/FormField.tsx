@@ -1,4 +1,5 @@
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
+import { ReactNode } from "react";
 
 import {
   FormItem,
@@ -12,6 +13,7 @@ interface FormFieldProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   label: string;
+  labelAction?: ReactNode;
   placeholder?: string;
   type?: "text" | "email" | "password";
 }
@@ -20,6 +22,7 @@ const FormField = <T extends FieldValues>({
   control,
   name,
   label,
+  labelAction,
   placeholder,
   type = "text",
 }: FormFieldProps<T>) => {
@@ -29,7 +32,10 @@ const FormField = <T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="label">{label}</FormLabel>
+          <div className="label-row">
+            <FormLabel className="label">{label}</FormLabel>
+            {labelAction}
+          </div>
           <FormControl>
             <Input
               className="input"

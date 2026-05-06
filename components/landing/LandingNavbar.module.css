@@ -1,0 +1,325 @@
+/* ─── Shell / Container ───────────────────────────────────────────────── */
+
+.landingShell {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* ─── Navbar ────────────────────────────────────────────────────────────── */
+
+.landingNavbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  width: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  background: rgba(10, 10, 20, 0);
+  transition: all 0.3s ease;
+}
+
+.landingNavbarScrolled {
+  background: rgba(10, 10, 20, 0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.15);
+}
+
+.landingNavbarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 24px;
+}
+
+/* ─── Brand ─────────────────────────────────────────────────────────────── */
+
+.landingBrand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.landingBrandLogo {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+}
+
+.landingBrandText {
+  color: #dcecff;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+}
+
+.landingBrandAccent {
+  color: #00d0ff;
+}
+
+/* ─── Links ─────────────────────────────────────────────────────────────── */
+
+.landingNavbarLinks {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex: 1;
+  justify-content: center;
+}
+
+.landingNavbarLink {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.landingNavbarLink::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+  transition: width 0.2s ease;
+}
+
+.landingNavbarLink:hover {
+  color: #ffffff;
+}
+
+.landingNavbarLink:hover::after {
+  width: 100%;
+}
+
+/* ─── Actions ───────────────────────────────────────────────────────────── */
+
+.landingNavbarActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* ─── Buttons ───────────────────────────────────────────────────────────── */
+
+.landingBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 9px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.landingBtnGhost {
+  color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.landingBtnGhost:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.landingBtnPrimary {
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.landingBtnPrimary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.35);
+}
+
+/* ─── Profile Menu ──────────────────────────────────────────────────────── */
+
+.landingProfileMenu {
+  position: relative;
+}
+
+.landingProfileMenuTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  padding: 0;
+}
+
+.landingProfileMenuTrigger:hover {
+  opacity: 0.88;
+}
+
+.landingProfileMenuAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: inherit;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.landingProfileMenuDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 240px;
+  background: rgba(15, 25, 40, 0.95);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+  z-index: 50;
+}
+
+.landingProfileMenuHeader {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.landingProfileMenuHeader strong {
+  color: #ecf7ff;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.landingProfileMenuHeader span {
+  color: #8ea8c3;
+  font-size: 0.8rem;
+}
+
+.landingProfileMenuDivider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.landingProfileMenuItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  color: #c6daef;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  font-family: inherit;
+}
+
+.landingProfileMenuItem:hover {
+  background: rgba(168, 85, 247, 0.12);
+  color: #ecf7ff;
+}
+
+.landingProfileMenuItemMuted {
+  color: #8ea8c3;
+}
+
+.landingProfileMenuItemMuted em {
+  display: block;
+  color: #6f8bad;
+  font-size: 0.75rem;
+  font-style: normal;
+  margin-top: 2px;
+}
+
+.landingProfileMenuItemDanger {
+  color: #ff6b6b;
+}
+
+.landingProfileMenuItemDanger:hover {
+  background: rgba(255, 107, 107, 0.12);
+  color: #ff8787;
+}
+
+/* ─── Responsive ────────────────────────────────────────────────────────── */
+
+@media (max-width: 960px) {
+  .landingNavbarLinks {
+    display: none;
+  }
+
+  .landingShell {
+    padding: 0 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .landingNavbar {
+    height: 56px;
+  }
+
+  .landingNavbarInner {
+    gap: 16px;
+  }
+
+  .landingBrand {
+    gap: 8px;
+    font-size: 0.9rem;
+  }
+
+  .landingBrandLogo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .landingNavbarActions {
+    gap: 8px;
+  }
+
+  .landingBtn {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+
+  .landingShell {
+    padding: 0 16px;
+  }
+
+  .landingProfileMenuDropdown {
+    min-width: 200px;
+  }
+}

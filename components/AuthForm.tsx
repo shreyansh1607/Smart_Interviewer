@@ -1,17 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { z } from "zod";
 import Link from "next/link";
-import Image from "next/image";
 import { toast } from "sonner";
 import { auth } from "@/firebase/client";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
 
 import { Form } from "@/components/ui/form";
@@ -30,6 +32,11 @@ const authFormSchema = (type: FormType) => {
 
 const AuthForm = ({ type }: { type: FormType }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [googleLoading, setGoogleLoading] = useState(false);
+
+  const plan = searchParams.get("plan");
+  const billing = searchParams.get("billing") as "monthly" | "yearly" | null;
 
   const formSchema = authFormSchema(type);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -65,7 +72,11 @@ const AuthForm = ({ type }: { type: FormType }) => {
         }
 
         toast.success("Account created successfully. Please sign in.");
-        router.push("/sign-in");
+        if (plan) {
+          router.push(`/sign-in?plan=${encodeURIComponent(plan)}${billing ? `&billing=${billing}` : ""}`);
+        } else {
+          router.push("/sign-in");
+        }
       } else {
         const { email, password } = data;
 
@@ -81,13 +92,25 @@ const AuthForm = ({ type }: { type: FormType }) => {
           return;
         }
 
-        await signIn({
+        const result = await signIn({
+          uid: userCredential.user.uid,
           email,
+          name: userCredential.user.displayName || undefined,
           idToken,
         });
 
+        if (!result?.success) {
+          toast.error(result.message);
+          return;
+        }
+
         toast.success("Signed in successfully.");
-        router.push("/");
+        if (plan) {
+          router.push(`/price?plan=${encodeURIComponent(plan)}${billing ? `&billing=${billing}` : ""}`);
+        } else {
+          router.push("/");
+        }
+        router.refresh();
       }
     } catch (error) {
       console.log(error);
@@ -95,29 +118,85 @@ const AuthForm = ({ type }: { type: FormType }) => {
     }
   };
 
+  const onGoogleAuth = async () => {
+    try {
+      setGoogleLoading(true);
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      const idToken = await userCredential.user.getIdToken();
+
+      if (!idToken) {
+        toast.error("Google sign-in failed. Please try again.");
+        return;
+      }
+
+      const result = await signIn({
+        uid: userCredential.user.uid,
+        email: userCredential.user.email || "",
+        name: userCredential.user.displayName || undefined,
+        idToken,
+      });
+
+      if (!result?.success) {
+        toast.error(result?.message || "Authentication failed.");
+        return;
+      }
+
+      toast.success("Signed in with Google.");
+      if (plan) {
+        router.push(`/price?plan=${encodeURIComponent(plan)}${billing ? `&billing=${billing}` : ""}`);
+      } else {
+        router.push("/");
+      }
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+      toast.error(`Google authentication failed: ${error}`);
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+
   const isSignIn = type === "sign-in";
 
   return (
-    <div className="card-border lg:min-w-[566px]">
-      <div className="flex flex-col gap-6 card py-14 px-10">
-        <div className="flex flex-row gap-2 justify-center">
-          <Image src="/logo.svg" alt="logo" height={32} width={38} />
-          <h2 className="text-primary-100">PrepWise</h2>
+    <div className="auth-card-wrap">
+      <div className="auth-card">
+        <div className="auth-tabs" role="tablist" aria-label="Authentication">
+          <Link
+            href="/sign-in"
+            className={`auth-tab${isSignIn ? " auth-tab--active" : ""}`}
+          >
+            Sign In
+          </Link>
+          <Link
+            href="/sign-up"
+            className={`auth-tab${!isSignIn ? " auth-tab--active" : ""}`}
+          >
+            Sign Up
+          </Link>
         </div>
 
-        <h3>Practice job interviews with AI</h3>
+        <h3 className="auth-card__title">
+          {isSignIn ? "Welcome back" : "Create your account"}
+        </h3>
+        <p className="auth-card__subtitle">
+          {isSignIn
+            ? "Sign in to continue your journey"
+            : "Join Nexus and start mock interviews with instant AI feedback."}
+        </p>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-6 mt-4 form"
+            className="w-full space-y-4 mt-2 form auth-form"
           >
             {!isSignIn && (
               <FormField
                 control={form.control}
                 name="name"
                 label="Name"
-                placeholder="Your Name"
+                placeholder="Enter your full name"
                 type="text"
               />
             )}
@@ -125,8 +204,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
             <FormField
               control={form.control}
               name="email"
-              label="Email"
-              placeholder="Your email address"
+              label="Email address"
+              placeholder="you@example.com"
               type="email"
             />
 
@@ -134,21 +213,49 @@ const AuthForm = ({ type }: { type: FormType }) => {
               control={form.control}
               name="password"
               label="Password"
-              placeholder="Enter your password"
+              labelAction={
+                isSignIn ? (
+                  <Link
+                    href="/forgot-password"
+                    className="auth-form__forgot-link"
+                  >
+                    Forgot password?
+                  </Link>
+                ) : undefined
+              }
+              placeholder={
+                isSignIn ? "Enter your password" : "Create a password"
+              }
               type="password"
             />
 
-            <Button className="btn" type="submit">
-              {isSignIn ? "Sign In" : "Create an Account"}
+            <Button className="btn auth-form__submit" type="submit">
+              {isSignIn ? "Sign In" : "Create Account"}
             </Button>
           </form>
         </Form>
 
-        <p className="text-center">
+        <div className="auth-social">
+          <span>or continue with</span>
+          <Button
+            type="button"
+            variant="outline"
+            className="auth-google-btn"
+            onClick={onGoogleAuth}
+            disabled={googleLoading}
+          >
+            <span className="auth-google-btn__icon" aria-hidden>
+              G
+            </span>
+            {googleLoading ? "Connecting..." : "Continue with Google"}
+          </Button>
+        </div>
+
+        <p className="text-center auth-card__switch-text">
           {isSignIn ? "No account yet?" : "Have an account already?"}
           <Link
             href={!isSignIn ? "/sign-in" : "/sign-up"}
-            className="font-bold text-user-primary ml-1"
+            className="auth-card__switch-link"
           >
             {!isSignIn ? "Sign In" : "Sign Up"}
           </Link>

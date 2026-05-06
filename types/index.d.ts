@@ -36,6 +36,12 @@ interface User {
   name: string;
   email: string;
   id: string;
+  subscription?: "Basic" | "Pro" | "Enterprise";
+  subscriptionStatus?: "active" | "trial" | "cancelled" | "expired";
+  subscriptionBilling?: "monthly" | "yearly";
+  category?: string;
+  razorpayPaymentId?: string;
+  razorpayOrderId?: string;
 }
 
 interface InterviewCardProps {
@@ -72,7 +78,9 @@ interface GetLatestInterviewsParams {
 }
 
 interface SignInParams {
+  uid: string;
   email: string;
+  name?: string;
   idToken: string;
 }
 
