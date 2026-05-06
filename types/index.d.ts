@@ -37,6 +37,11 @@ interface User {
   email: string;
   id: string;
   subscription?: "Basic" | "Pro" | "Enterprise";
+  subscriptionStatus?: "active" | "trial" | "cancelled" | "expired";
+  subscriptionBilling?: "monthly" | "yearly";
+  category?: string;
+  razorpayPaymentId?: string;
+  razorpayOrderId?: string;
 }
 
 interface InterviewCardProps {

@@ -14,7 +14,7 @@ type LandingNavbarProps = {
 const navLinks = [
   { label: "Home", href: "/#home" },
   { label: "Features", href: "/#features" },
-  { label: "Interview", href: "/#product-preview" },
+  { label: "Interview", href: "/dashboard" },
   { label: "Pricing", href: "/price" },
   { label: "Community", href: "/#community" },
   { label: "About", href: "/about" },

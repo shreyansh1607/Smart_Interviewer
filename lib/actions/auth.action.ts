@@ -42,6 +42,8 @@ export async function signUp(params: SignUpParams) {
       name,
       email,
       subscription: "Basic",
+      subscriptionStatus: "active",
+      subscriptionBilling: "monthly",
     });
 
     return {
@@ -82,6 +84,8 @@ export async function signIn(params: SignInParams) {
         name: name || email.split("@")[0],
         email,
         subscription: "Basic",
+        subscriptionStatus: "active",
+        subscriptionBilling: "monthly",
       });
     }
 

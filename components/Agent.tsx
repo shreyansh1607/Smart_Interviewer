@@ -34,6 +34,8 @@ const Agent = ({
   const [messages, setMessages] = useState<SavedMessage[]>([]);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [lastMessage, setLastMessage] = useState<string>("");
+  const [redirecting, setRedirecting] = useState(false);
+  const [hasRedirected, setHasRedirected] = useState(false);
 
   useEffect(() => {
     console.log("Agent mounted", {
@@ -107,6 +109,7 @@ const Agent = ({
 
     const handleGenerateFeedback = async (messages: SavedMessage[]) => {
       console.log("Generating feedback", { interviewId, userId, messages });
+      setRedirecting(true);
       const { success, feedbackId: id } = await createFeedback({
         interviewId: interviewId!,
         userId: userId!,
@@ -125,14 +128,17 @@ const Agent = ({
       }
     };
 
-    if (callStatus === CallStatus.FINISHED) {
+    if (callStatus === CallStatus.FINISHED && !hasRedirected) {
+      setHasRedirected(true);
+      setRedirecting(true);
       if (type === "generate") {
-        router.push("/");
+        // Redirect to dashboard interviews tab after Vapi call ends
+        router.push("/dashboard?tab=interviews");
       } else {
         handleGenerateFeedback(messages);
       }
     }
-  }, [messages, callStatus, feedbackId, interviewId, router, type, userId]);
+  }, [messages, callStatus, feedbackId, interviewId, hasRedirected, router, type, userId]);
 
   const handleCall = async () => {
     console.log("Call initiated", {
@@ -205,9 +211,9 @@ const Agent = ({
         </div>
       </div>
 
-      {messages.length > 0 && (
-        <div className="transcript-border">
-          <div className="transcript">
+      <div className="transcript-border">
+        <div className="transcript">
+          {messages.length > 0 ? (
             <p
               key={lastMessage}
               className={cn(
@@ -217,13 +223,27 @@ const Agent = ({
             >
               {lastMessage}
             </p>
-          </div>
+          ) : (
+            <p className="interview-text">Transcription will appear here.</p>
+          )}
+        </div>
+      </div>
+
+      {redirecting && (
+        <div className="mx-auto mb-4 max-w-xl rounded-2xl border border-violet-500/20 bg-slate-950/85 px-4 py-3 text-center text-sm text-slate-100 shadow-lg shadow-violet-500/10">
+          {type === "generate"
+            ? "Call ended — redirecting you back to the dashboard..."
+            : "Call ended — saving feedback and redirecting you to the feedback page..."}
         </div>
       )}
 
       <div className="w-full flex justify-center">
         {callStatus !== "ACTIVE" ? (
-          <button className="relative btn-call" onClick={() => handleCall()}>
+          <button
+            className="relative btn-call"
+            onClick={() => handleCall()}
+            disabled={redirecting}
+          >
             <span
               className={cn(
                 "absolute animate-ping rounded-full opacity-75",
@@ -232,14 +252,22 @@ const Agent = ({
             />
 
             <span className="relative">
-              {callStatus === "INACTIVE" || callStatus === "FINISHED"
+              {redirecting
+                ? type === "generate"
+                  ? "Redirecting..."
+                  : "Saving feedback..."
+                : callStatus === "INACTIVE" || callStatus === "FINISHED"
                 ? "Call"
                 : ". . ."}
             </span>
           </button>
         ) : (
-          <button className="btn-disconnect" onClick={() => handleDisconnect()}>
-            End
+          <button
+            className="btn-disconnect"
+            onClick={() => handleDisconnect()}
+            disabled={redirecting}
+          >
+            {redirecting ? "Ending..." : "End"}
           </button>
         )}
       </div>

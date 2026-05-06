@@ -4,20 +4,21 @@ import { ReactNode } from "react";
 import { redirect } from "next/navigation";
 
 import { isAuthenticated } from "@/lib/actions/auth.action";
+import styles from "./rootLayout.module.css";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
   const isUserAuthenticated = await isAuthenticated();
   if (!isUserAuthenticated) redirect("/sign-in");
 
   return (
-    <div className="root-layout">
-      <nav>
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/icon.svg" alt="Nexus logo" width={38} height={38} />
-          <h2 className="text-primary-100">Nexus</h2>
+    <div className={styles.rootLayout}>
+      <nav className={styles.navbar}>
+        <Link href="/" className={styles.navLogo}>
+          <Image src="/icon.svg" alt="Nexus logo" width={32} height={32} />
+          <h2 className={styles.navBrand}>NEXUS</h2>
         </Link>
       </nav>
-
+  
       {children}
     </div>
   );

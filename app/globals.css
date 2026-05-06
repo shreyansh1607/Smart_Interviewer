@@ -1,12 +1,12 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 
 /* Note: removed nonstandard at-rules (@plugin/@custom-variant/@theme) to
   keep this file compatible with standard Tailwind/PostCSS processors.
   If you rely on `tailwindcss-animate`, add it to `tailwind.config.js` plugins.
 */
-
+@import "tailwindcss";
 /* Restore a small set of CSS variables used across components */
 :root {
   --color-success-100: #49de50;
@@ -34,71 +34,98 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  --background: #ffffff;
+  --foreground: #111827;
+
+  --card: #ffffff;
+  --card-foreground: #111827;
+
+  --popover: #ffffff;
+  --popover-foreground: #111827;
+
+  --primary: #1f2937;
+  --primary-foreground: #f9fafb;
+
+  --secondary: #f3f4f6;
+  --secondary-foreground: #1f2937;
+
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280;
+
+  --accent: #f3f4f6;
+  --accent-foreground: #1f2937;
+
+  --destructive: #dc2626;
+
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #9ca3af;
+
+  --chart-1: #f97316;
+  --chart-2: #06b6d4;
+  --chart-3: #3b82f6;
+  --chart-4: #eab308;
+  --chart-5: #f59e0b;
+
+  --sidebar: #f9fafb;
+  --sidebar-foreground: #111827;
+
+  --sidebar-primary: #1f2937;
+  --sidebar-primary-foreground: #f9fafb;
+
+  --sidebar-accent: #f3f4f6;
+  --sidebar-accent-foreground: #1f2937;
+
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #9ca3af;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: var(--light-100);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #020617;
+  --foreground: #f9fafb;
+
+  --card: #111827;
+  --card-foreground: #f9fafb;
+
+  --popover: #111827;
+  --popover-foreground: #f9fafb;
+
+  --primary: #e5e7eb;
+  --primary-foreground: #1f2937;
+
+  --secondary: #1f2937;
+  --secondary-foreground: #f9fafb;
+
+  --muted: #1f2937;
+  --muted-foreground: #9ca3af;
+
+  --accent: #1f2937;
+  --accent-foreground: #f9fafb;
+
+  --destructive: #ef4444;
+
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: #6b7280;
+
+  --chart-1: #8b5cf6;
+  --chart-2: #22c55e;
+  --chart-3: #f59e0b;
+  --chart-4: #ec4899;
+  --chart-5: #ef4444;
+
+  --sidebar: #111827;
+  --sidebar-foreground: #f9fafb;
+
+  --sidebar-primary: #8b5cf6;
+  --sidebar-primary-foreground: #f9fafb;
+
+  --sidebar-accent: #1f2937;
+  --sidebar-accent-foreground: #f9fafb;
+
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #6b7280;
 }
 
 /* theme-inline mappings removed; values are defined in :root/.dark above */
@@ -645,7 +672,11 @@
     color: #ecf7ff;
     border-color: rgba(149, 145, 255, 0.6);
     box-shadow: inset 0 1px 0 rgba(210, 213, 255, 0.18);
-    background: linear-gradient(180deg, rgba(66, 74, 142, 0.84), rgba(24, 31, 58, 0.92));
+    background: linear-gradient(
+      180deg,
+      rgba(66, 74, 142, 0.84),
+      rgba(24, 31, 58, 0.92)
+    );
   }
 
   .auth-card__brand {
@@ -933,6 +964,15 @@
   }
 }
 
+@keyframes heartPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -1017,9 +1057,9 @@ html {
 
   .landing-navbar--scrolled {
     background: rgba(6, 12, 24, 0.9);
-    border-bottom-color: rgba(70, 110, 150, 0.12);
+    border-bottom-color: rgba(168, 85, 247, 0.15);
     backdrop-filter: blur(12px);
-    box-shadow: 0 12px 40px rgba(20, 60, 100, 0.18);
+    box-shadow: 0 12px 40px rgba(168, 85, 247, 0.12);
   }
 
   .landing-navbar__inner {
@@ -1061,7 +1101,7 @@ html {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #4db6ff 0%, #1e88ff 60%);
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 60%);
     color: var(--lp-bg);
     font-weight: 800;
     letter-spacing: 0.5px;
@@ -1083,7 +1123,7 @@ html {
   }
 
   .landing-brand__accent {
-    background: linear-gradient(90deg, #30d4ff, #7c4dff);
+    background: linear-gradient(90deg, #a855f7, #7c3aed);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -1108,7 +1148,7 @@ html {
   }
 
   .landing-navbar__link:hover {
-    color: var(--lp-accent);
+    color: #a855f7;
     opacity: 1;
   }
 
@@ -1128,17 +1168,17 @@ html {
     width: 40px;
     height: 40px;
     border-radius: 999px;
-    border: 1px solid rgba(135, 166, 255, 0.5);
+    border: 1px solid rgba(168, 85, 247, 0.4);
     background:
-      linear-gradient(180deg, rgba(31, 40, 76, 0.86), rgba(12, 20, 38, 0.92)),
+      linear-gradient(180deg, rgba(88, 28, 135, 0.6), rgba(59, 20, 100, 0.7)),
       rgba(10, 16, 28, 0.95);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     box-shadow:
-      0 0 0 1px rgba(102, 121, 255, 0.15),
-      0 8px 24px rgba(58, 61, 152, 0.25);
+      0 0 0 1px rgba(168, 85, 247, 0.15),
+      0 8px 24px rgba(168, 85, 247, 0.15);
     transition:
       transform 0.18s ease,
       box-shadow 0.18s ease;
@@ -1147,8 +1187,8 @@ html {
   .landing-profile-menu__trigger:hover {
     transform: scale(1.05);
     box-shadow:
-      0 0 0 1px rgba(122, 169, 255, 0.22),
-      0 12px 30px rgba(80, 89, 220, 0.34);
+      0 0 0 1px rgba(168, 85, 247, 0.3),
+      0 12px 30px rgba(168, 85, 247, 0.25);
   }
 
   .landing-profile-menu__avatar {
@@ -1161,7 +1201,7 @@ html {
     font-size: 0.74rem;
     font-weight: 700;
     color: #eaf4ff;
-    background: linear-gradient(135deg, #8a5fff 0%, #38c9ff 100%);
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
   }
 
   .landing-profile-menu__dropdown {
@@ -1281,17 +1321,17 @@ html {
   }
 
   .landing-btn--primary {
-    background: linear-gradient(90deg, #39c6ff, #1e88ff);
-    color: var(--lp-bg);
+    background: linear-gradient(90deg, #a855f7, #7c3aed);
+    color: #ffffff;
     border-color: rgba(255, 255, 255, 0.04);
     box-shadow:
-      0 18px 48px rgba(30, 136, 255, 0.18),
+      0 18px 48px rgba(168, 85, 247, 0.25),
       inset 0 1px 0 rgba(255, 255, 255, 0.03);
   }
 
   .landing-btn--primary:hover {
     box-shadow:
-      0 20px 56px rgba(30, 136, 255, 0.22),
+      0 20px 56px rgba(168, 85, 247, 0.35),
       inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
 
@@ -2034,22 +2074,24 @@ html {
     z-index: 1;
     padding: 30px 0 38px;
     border-top: 1px solid var(--lp-border);
+    background: linear-gradient(180deg, rgba(7, 17, 40, 0.5) 0%, rgba(5, 7, 15, 0.8) 100%);
   }
 
   .landing-footer__panel {
-    border: 1px solid rgba(126, 170, 245, 0.16);
+    border: 1px solid rgba(168, 85, 247, 0.2);
     background:
       radial-gradient(
-        120% 120% at 0% 0%,
-        rgba(0, 174, 255, 0.1) 0%,
-        rgba(10, 16, 30, 0.82) 40%
+        140% 120% at 10% 0%,
+        rgba(168, 85, 247, 0.12) 0%,
+        rgba(139, 92, 246, 0.06) 25%,
+        rgba(10, 16, 30, 0.88) 60%
       ),
-      rgba(6, 10, 20, 0.88);
+      rgba(6, 10, 20, 0.92);
     border-radius: 24px;
     padding: 28px 26px 18px;
     box-shadow:
       0 14px 40px rgba(1, 6, 20, 0.4),
-      inset 0 1px 0 rgba(190, 230, 255, 0.08);
+      inset 0 1px 0 rgba(168, 85, 247, 0.12);
   }
 
   .landing-footer__grid {
@@ -2122,11 +2164,21 @@ html {
   .landing-footer__copy {
     color: #bfd0e3;
     font-size: 0.9rem;
+    font-weight: 500;
   }
 
   .landing-footer__meta {
-    color: #8ba5c3;
-    font-size: 0.88rem;
+    color: #9ab2cd;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .landing-footer__heart {
+    display: inline-block;
+    animation: heartPulse 1.5s ease-in-out infinite;
   }
 
   @media (max-width: 1100px) {
@@ -2248,5 +2300,4 @@ html {
       font-size: 0.78rem;
     }
   }
-
 }

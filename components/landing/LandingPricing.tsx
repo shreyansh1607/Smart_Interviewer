@@ -1,13 +1,16 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useState } from "react";
+import Script from "next/script";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 const plans = [
   {
     name: "Starter",
-    priceMonthly: "$0 / month",
-    priceYearly: "$0 / month",
+    priceMonthly: "₹0 / month",
+    priceYearly: "₹0 / month",
     description: "Perfect for getting started",
     features: [
       "5 AI interviews / month",
@@ -21,8 +24,8 @@ const plans = [
   },
   {
     name: "Pro",
-    priceMonthly: "$19 / month",
-    priceYearly: "$15 / month",
+    priceMonthly: "₹499 / month",
+    priceYearly: "₹4,788 / year",
     description: "For serious learners and professionals",
     features: [
       "Unlimited AI interviews",
@@ -32,8 +35,8 @@ const plans = [
       "Resume review",
       "Priority support",
     ],
-    cta: "Start 7-Day Free Trial",
-    note: "Cancel anytime",
+    cta: "Upgrade to Pro",
+    note: "Save 20% on yearly billing",
     featured: true,
   },
   {
@@ -55,14 +58,179 @@ const plans = [
   },
 ];
 
-export default function LandingPricing() {
+interface LandingPricingProps {
+  currentUser?: User | null;
+}
+
+export default function LandingPricing({ currentUser }: LandingPricingProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
   const [selected, setSelected] = useState<string>(
     plans.find((p) => p.featured)?.name ?? plans[0].name
   );
+  const [loadingPlan, setLoadingPlan] = useState(false);
+
+  useEffect(() => {
+    const planParam = searchParams.get("plan");
+    const billingParam = searchParams.get("billing");
+    if (planParam && plans.some((plan) => plan.name === planParam)) {
+      setSelected(planParam);
+    }
+    if (billingParam === "yearly") {
+      setBilling("yearly");
+    }
+  }, [searchParams]);
+
+  const getPlanPrice = (plan: typeof plans[number]) =>
+    billing === "monthly" ? plan.priceMonthly : plan.priceYearly;
+
+  const handleCheckout = async (planName: string) => {
+    if (!currentUser?.id) {
+      router.push(`/sign-up?plan=${encodeURIComponent(planName)}&billing=${billing}`);
+      return;
+    }
+
+    const selectedPlan = plans.find((plan) => plan.name === planName);
+    if (!selectedPlan) {
+      toast.error("Unable to find the selected plan.");
+      return;
+    }
+
+    setLoadingPlan(true);
+
+    try {
+      const response = await fetch("/api/razorpay/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          plan: planName,
+          billing,
+          userId: currentUser.id,
+        }),
+      });
+
+      const payload = await response.json();
+      if (!response.ok || !payload.success) {
+        throw new Error(payload.message || "Unable to create payment order.");
+      }
+
+      const order = payload.order;
+      const Razorpay = (window as any).Razorpay;
+      if (!Razorpay) {
+        throw new Error("Razorpay script failed to load.");
+      }
+
+      const checkoutOptions = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: order.currency,
+        name: "Nexus",
+        description: `${planName} subscription (${billing})`,
+        order_id: order.id,
+        image: "/logo.svg",
+        method: {
+          upi: true,
+          upi_link: true,
+          card: true,
+          netbanking: true,
+          wallet: true,
+          emandate: false,
+          paylater: false,
+        },
+        handler: async (response: any) => {
+          const verifyRes = await fetch("/api/razorpay/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+              userId: currentUser.id,
+              plan: planName,
+              billing,
+              amount: order.amount,
+            }),
+          });
+          const verifyPayload = await verifyRes.json();
+          if (!verifyRes.ok || !verifyPayload.success) {
+            toast.error(verifyPayload.message || "Payment verification failed.");
+            return;
+          }
+
+          toast.success("Payment complete. Your plan has been updated.");
+          router.refresh();
+        },
+        prefill: {
+          name: currentUser.name,
+          email: currentUser.email,
+        },
+        theme: { color: "#7c3aed" },
+      };
+
+      const rzp = new Razorpay(checkoutOptions);
+      rzp.open();
+    } catch (error) {
+      console.error(error);
+      toast.error((error as Error).message || "Payment checkout failed.");
+    } finally {
+      setLoadingPlan(false);
+    }
+  };
+
+  const renderAction = (plan: typeof plans[number]) => {
+    if (plan.name === "Pro") {
+      if (currentUser?.subscription === "Pro") {
+        return (
+          <button className="landing-btn landing-btn--primary" disabled>
+            Current plan
+          </button>
+        );
+      }
+
+      return (
+        <button
+          className="landing-btn landing-btn--primary"
+          type="button"
+          onClick={() => handleCheckout(plan.name)}
+          disabled={loadingPlan}
+        >
+          {currentUser?.id
+            ? loadingPlan
+              ? "Starting checkout..."
+              : plan.cta
+            : "Sign up to pay"}
+        </button>
+      );
+    }
+
+    if (plan.name === "Enterprise") {
+      return (
+        <Link
+          href="/sign-up?plan=Enterprise&billing=monthly"
+          className="landing-btn landing-btn--secondary"
+        >
+          {plan.cta}
+        </Link>
+      );
+    }
+
+    return (
+      <Link
+        href="/sign-up?plan=Starter&billing=monthly"
+        className="landing-btn landing-btn--secondary"
+      >
+        {plan.cta}
+      </Link>
+    );
+  };
 
   return (
     <section id="pricing" className="landing-section pricing-main-section">
+      <Script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        strategy="afterInteractive"
+      />
       <div className="landing-shell">
         <div className="landing-section-header pricing-header">
           <div className="landing-kicker">PRICING</div>
@@ -103,8 +271,7 @@ export default function LandingPricing() {
         <div className="landing-pricing-grid pricing-cards-grid">
           {plans.map((plan) => {
             const isSelected = selected === plan.name;
-            const price =
-              billing === "monthly" ? plan.priceMonthly : plan.priceYearly;
+            const price = getPlanPrice(plan);
             return (
               <article
                 key={plan.name}
@@ -140,12 +307,7 @@ export default function LandingPricing() {
                   ))}
                 </ul>
 
-                <Link
-                  href={`/sign-up?plan=${encodeURIComponent(plan.name)}&billing=${billing}`}
-                  className={`landing-btn${plan.featured ? " landing-btn--primary" : " landing-btn--secondary"}`}
-                >
-                  {plan.cta}
-                </Link>
+                {renderAction(plan)}
 
                 <p className="pricing-card-note">{plan.note}</p>
               </article>

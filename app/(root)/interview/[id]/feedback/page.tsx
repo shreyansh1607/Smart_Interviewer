@@ -1,14 +1,15 @@
 import dayjs from "dayjs";
 import Link from "next/link";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import {
   getFeedbackByInterviewId,
   getInterviewById,
 } from "@/lib/actions/general.action";
-import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/actions/auth.action";
+
+import DownloadButton from "./DowloadButton";
+import styles from "./Feedback.module.css";
 
 const Feedback = async ({ params }: RouteParams) => {
   const { id } = await params;
@@ -23,95 +24,139 @@ const Feedback = async ({ params }: RouteParams) => {
   });
 
   return (
-    <section className="section-feedback">
-      <div className="flex flex-row justify-center">
-        <h1 className="text-4xl font-semibold">
-          Feedback on the Interview -{" "}
-          <span className="capitalize">{interview.role}</span> Interview
-        </h1>
-      </div>
+    <section className={styles["feedback-page"]}>
 
-      <div className="flex flex-row justify-center ">
-        <div className="flex flex-row gap-5">
-          {/* Overall Impression */}
-          <div className="flex flex-row gap-2 items-center">
-            <Image src="/star.svg" width={22} height={22} alt="star" />
-            <p>
-              Overall Impression:{" "}
-              <span className="text-primary-200 font-bold">
-                {feedback?.totalScore}
-              </span>
-              /100
-            </p>
-          </div>
+      {/* HEADER */}
+      <div className={styles["feedback-header"]}>
+        <div>
+          <Link href="/dashboard?tab=interviews" className={styles["back-link"]}>
+            ← Back to Interviews
+          </Link>
 
-          {/* Date */}
-          <div className="flex flex-row gap-2">
-            <Image src="/calendar.svg" width={22} height={22} alt="calendar" />
-            <p>
-              {feedback?.createdAt
-                ? dayjs(feedback.createdAt).format("MMM D, YYYY h:mm A")
-                : "N/A"}
-            </p>
+          <h1 className={styles.title}>Interview Feedback</h1>
+
+          <p className={styles.subtitle}>
+            {interview.role} Interview
+          </p>
+
+          <div className={styles.meta}>
+            <span>
+              {dayjs(feedback?.createdAt).format("MMM D, YYYY h:mm A")}
+            </span>
+            <span>• Interview ID: {interview.id}</span>
           </div>
         </div>
+
+        {/* ✅ DOWNLOAD BUTTON */}
+        <DownloadButton feedback={feedback} interview={interview} />
       </div>
 
-      <hr />
+      {/* GRID */}
+      <div className={styles["feedback-grid"]}>
 
-      <p>{feedback?.finalAssessment}</p>
+        {/* LEFT */}
+        <div className={styles.left}>
 
-      {/* Interview Breakdown */}
-      <div className="flex flex-col gap-4">
-        <h2>Breakdown of the Interview:</h2>
-        {feedback?.categoryScores?.map((category, index) => (
-          <div key={index}>
-            <p className="font-bold">
-              {index + 1}. {category.name} ({category.score}/100)
-            </p>
-            <p>{category.comment}</p>
+          {/* PERFORMANCE */}
+          <div className={styles.card}>
+            <h3>Performance Breakdown</h3>
+
+            {feedback?.categoryScores.map((item, i) => (
+              <div key={i} className={styles["score-item"]}>
+                <div className={styles["score-top"]}>
+                  <span>{i + 1}. {item.name}</span>
+                  <span>{item.score}/100</span>
+                </div>
+
+                <div className={styles["progress-bar"]}>
+                  <div
+                    className={styles["progress-fill"]}
+                    style={{ width: `${item.score}%` }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+
+          {/* DETAILED */}
+          <div className={styles.card}>
+            <h3>Detailed Feedback</h3>
+
+            {feedback?.categoryScores.map((item, i) => (
+              <details key={i} className={styles.accordion}>
+                <summary>
+                  {i + 1}. {item.name}
+                  <span>{item.score}/100</span>
+                </summary>
+                <p>{item.comment}</p>
+              </details>
+            ))}
+          </div>
+
+        </div>
+
+        {/* RIGHT */}
+        <div className={styles.right}>
+
+          {/* SCORE */}
+          <div className={`${styles.card} ${styles["score-card"]}`}>
+            <div
+              className={styles.circle}
+              style={{
+                background: `conic-gradient(#8b5cf6 ${feedback.totalScore}%, #1e293b 0)`
+              }}
+            >
+              <span>{feedback?.totalScore}</span>
+              <p>/100</p>
+            </div>
+
+            <div>
+              <h3>Needs Improvement</h3>
+              <p>{feedback?.finalAssessment}</p>
+            </div>
+          </div>
+
+          {/* SUMMARY */}
+          <div className={styles.card}>
+            <h3>Summary</h3>
+            <p>{feedback?.finalAssessment}</p>
+          </div>
+
+          {/* STRENGTHS */}
+          <div className={styles.card}>
+            <h3 className={styles.green}>Strengths</h3>
+            <ul className={styles.list}>
+              {feedback?.strengths.map((s, i) => (
+                <li key={i}>{s}</li>
+              ))}
+            </ul>
+          </div>
+
+          {/* IMPROVEMENTS */}
+          <div className={styles.card}>
+            <h3 className={styles.orange}>Areas for Improvement</h3>
+            <ul className={`${styles.list} ${styles["orange-list"]}`}>
+              {feedback?.areasForImprovement.map((a, i) => (
+                <li key={i}>{a}</li>
+              ))}
+            </ul>
+          </div>
+
+        </div>
+
       </div>
 
-      <div className="flex flex-col gap-3">
-        <h3>Strengths</h3>
-        <ul>
-          {feedback?.strengths?.map((strength, index) => (
-            <li key={index}>{strength}</li>
-          ))}
-        </ul>
+      {/* FOOTER */}
+      <div className={styles["footer-actions"]}>
+        <Link href="/dashboard?tab=interviews" className={styles["btn-secondary"]}>
+          Back to Dashboard
+        </Link>
+
+        <Link href={`/interview/${id}`} className={styles["btn-primary"]}>
+          Retake Interview
+        </Link>
       </div>
 
-      <div className="flex flex-col gap-3">
-        <h3>Areas for Improvement</h3>
-        <ul>
-          {feedback?.areasForImprovement?.map((area, index) => (
-            <li key={index}>{area}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="buttons">
-        <Button className="btn-secondary flex-1">
-          <Link href="/" className="flex w-full justify-center">
-            <p className="text-sm font-semibold text-primary-200 text-center">
-              Back to dashboard
-            </p>
-          </Link>
-        </Button>
-
-        <Button className="btn-primary flex-1">
-          <Link
-            href={`/interview/${id}`}
-            className="flex w-full justify-center"
-          >
-            <p className="text-sm font-semibold text-black text-center">
-              Retake Interview
-            </p>
-          </Link>
-        </Button>
-      </div>
     </section>
   );
 };

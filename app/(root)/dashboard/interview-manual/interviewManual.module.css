@@ -1,0 +1,484 @@
+/* Manual interview page — metallic/glass finish */
+
+.section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px 32px 32px;
+  margin-top: 20px;
+  min-height: 100vh;
+  background: #0e1220;           /* ← deep navy, not black */
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+
+.headerBar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.headerIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.95), rgba(124, 58, 237, 0.95));
+  box-shadow:
+    0 10px 30px rgba(168, 85, 247, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #e8f6ff;
+  line-height: 1.1;
+}
+
+.title::after {
+  content: "";
+  display: block;
+  width: 100px;
+  height: 2px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(168, 85, 247, 0.95), rgba(53, 185, 255, 0.65));
+}
+
+.subtitle {
+  color: #89a8c2;
+  font-size: 13px;
+  max-width: 60ch;
+  line-height: 1.5;
+}
+
+/* ── Vapi switch button ──────────────────────────────────── */
+
+.switchBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(120, 165, 220, 0.22);
+  background: rgba(13, 25, 45, 0.68);
+  color: #cfe6ff;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: center;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.switchBtn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(110, 185, 255, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 54px rgba(20, 112, 210, 0.22);
+  background: rgba(13, 25, 45, 0.78);
+}
+
+/* ── Two-column grid — equal height cards ────────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 20px;
+  align-items: stretch;          /* ← both cards same height */
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    padding: 20px 20px 28px;
+  }
+}
+
+/* ── Cards ───────────────────────────────────────────────── */
+
+.card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  padding: 22px 22px 20px;
+  border: 1px solid rgba(139, 168, 230, 0.16);
+  display: flex;
+  flex-direction: column;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.02) 20%,
+      rgba(255, 255, 255, 0) 50%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(22, 34, 66, 0.90) 0%,
+      rgba(14, 22, 44, 0.96) 100%
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 24px 60px rgba(2, 8, 24, 0.45);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 10% 8%, rgba(53, 185, 255, 0.10) 0%, transparent 60%),
+    radial-gradient(70% 60% at 88% 18%, rgba(168, 85, 247, 0.08) 0%, transparent 60%);
+}
+
+.cardContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;                       /* ← fills remaining card height */
+}
+
+/* ── Step header ─────────────────────────────────────────── */
+
+.stepHeader {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stepLeft {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.stepNumber {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  color: #dff0ff;
+  background: rgba(168, 85, 247, 0.18);
+  border: 1px solid rgba(168, 85, 247, 0.32);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  margin-top: 1px;
+}
+
+.cardTitle {
+  color: #eaf4ff;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.cardDesc {
+  color: #7a9abf;
+  font-size: 12.5px;
+  margin-top: 3px;
+  line-height: 1.55;
+}
+
+/* ── Manual badge ────────────────────────────────────────── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid rgba(120, 172, 242, 0.28);
+  background: rgba(9, 26, 43, 0.72);
+  color: #cbe5ff;
+  padding: 5px 10px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 800;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+.badgeManual {
+  border-color: rgba(168, 85, 247, 0.40);
+  background: rgba(88, 28, 135, 0.28);
+  color: #d8c6ff;
+}
+
+/* ── Drop zone ───────────────────────────────────────────── */
+
+.dropzone {
+  position: relative;
+  border-radius: 14px;
+  border: 1.5px dashed rgba(123, 160, 220, 0.28);
+  background: rgba(12, 20, 40, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.dropzone:hover {
+  border-color: rgba(168, 85, 247, 0.50);
+  background: rgba(168, 85, 247, 0.06);
+  transform: translateY(-1px);
+}
+
+.dropIconWrap {
+  width: 60px;
+  height: 60px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.32), rgba(10, 16, 30, 0.65));
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  color: #c4b5fd;
+}
+
+.dropTitle {
+  color: #eaf4ff;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+}
+
+.dropSub {
+  color: #7a9abf;
+  font-size: 12px;
+}
+
+/* ── File bar ────────────────────────────────────────────── */
+
+.fileBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(127, 169, 242, 0.16);
+  background: rgba(10, 18, 36, 0.65);
+  padding: 9px 12px;
+}
+
+.fileName {
+  color: #7a9abf;
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.browseBtn {
+  border-radius: 8px;
+  padding: 6px 14px;
+  border: 1px solid rgba(168, 85, 247, 0.30);
+  background: rgba(10, 16, 30, 0.72);
+  color: #dff0ff;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.browseBtn:hover {
+  background: rgba(168, 85, 247, 0.14);
+}
+
+/* ── Row (Parse + Clear) ─────────────────────────────────── */
+
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ── Notes box ───────────────────────────────────────────── */
+
+.noteBox {
+  border-radius: 12px;
+  border: 1px solid rgba(114, 151, 211, 0.22);
+  background: rgba(11, 18, 31, 0.82);
+  padding: 12px;
+}
+
+.noteTitle {
+  color: #e7f3ff;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.noteBody {
+  margin-top: 6px;
+  color: #a6bfd9;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+/* ── Hint text ───────────────────────────────────────────── */
+
+.hint {
+  color: #5e7a99;
+  font-size: 12px;
+  line-height: 1.55;
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  margin-top: auto;              /* ← pin to bottom of left card */
+}
+
+/* ── Form ────────────────────────────────────────────────── */
+
+.formStack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+.formFields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+.formGrid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 520px) {
+  .formGrid2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fieldLabelRow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.fieldIcon {
+  width: 15px;
+  height: 15px;
+  color: rgba(168, 85, 247, 0.85);
+  flex-shrink: 0;
+}
+
+.select {
+  width: 100%;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(127, 169, 242, 0.22);
+  background: rgba(14, 22, 38, 0.92);
+  color: #e9f3ff;
+  padding: 0 12px;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.select:focus-visible {
+  border-color: rgba(90, 200, 255, 0.8);
+  box-shadow: 0 0 0 3px rgba(47, 174, 247, 0.2);
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;              /* ← pin generate btn to card bottom */
+}
+
+.finePrint {
+  color: #5e7a99;
+  font-size: 12px;
+  line-height: 1.55;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* ── Utility ─────────────────────────────────────────────── */
+
+.stack {
+  position: relative;
+  display: grid;
+  gap: 12px;
+}
+
+.cardHeader {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}

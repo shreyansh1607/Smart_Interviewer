@@ -1,0 +1,192 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 4px 0;
+}
+
+/* ── Header ───────────────────────────────────────────── */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: -0.025em;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* ── Card ─────────────────────────────────────────────── */
+.card {
+  border-radius: 20px;
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  background: linear-gradient(160deg, #0f172a 0%, #0a0f1e 100%);
+  padding: 48px 32px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 520px;
+}
+
+/* Purple ambient glow behind illustration */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 460px;
+  height: 280px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(109, 40, 217, 0.26) 0%,
+    transparent 68%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Sparkle dots */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 16%, rgba(139, 92, 246, 0.75) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 85% 12%, rgba(139, 92, 246, 0.65) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 22% 70%, rgba(139, 92, 246, 0.5)  0%, transparent 100%),
+    radial-gradient(1px   1px   at 78% 66%, rgba(139, 92, 246, 0.45) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 92% 38%, rgba(139, 92, 246, 0.55) 0%, transparent 100%),
+    radial-gradient(1px   1px   at  8% 52%, rgba(139, 92, 246, 0.4)  0%, transparent 100%),
+    radial-gradient(1px   1px   at 48% 88%, rgba(139, 92, 246, 0.35) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Illustration ─────────────────────────────────────── */
+.illustration {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 28px;
+}
+
+.illustrationImg {
+  object-fit: contain;
+  filter: drop-shadow(0 0 44px rgba(109, 40, 217, 0.5));
+}
+
+/* ── Text ─────────────────────────────────────────────── */
+.heading {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 14px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #f1f5f9;
+  letter-spacing: -0.02em;
+}
+
+.highlight {
+  color: #7c3aed;
+}
+
+.body {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 14px;
+  color: #94a3b8;
+  line-height: 1.75;
+}
+
+/* ── Divider ──────────────────────────────────────────── */
+.dividerWrap {
+  position: relative;
+  z-index: 1;
+  margin: 28px 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dividerWrap::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(51, 65, 85, 0.5);
+}
+
+.dividerDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #7c3aed;
+  box-shadow: 0 0 10px rgba(124, 58, 237, 0.85);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Info banner ──────────────────────────────────────── */
+.infoBanner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  border-radius: 14px;
+  padding: 16px 20px;
+  width: 100%;
+  max-width: 520px;
+  text-align: left;
+}
+
+.infoIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(100, 116, 139, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.infoText {
+  margin: 0;
+  font-size: 13px;
+  color: #cbd5e1;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.heartIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Responsive ───────────────────────────────────────── */
+@media (max-width: 600px) {
+  .card    { padding: 36px 20px 32px; min-height: 460px; }
+  .heading { font-size: 19px; }
+}

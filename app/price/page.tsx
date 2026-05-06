@@ -15,7 +15,7 @@ export default async function PricePage() {
       className={`landing-page price-page ${dmSans.variable} ${syne.variable}`}
     >
       <LandingNavbar scrolled={true} currentUser={currentUser} />
-      <LandingPricing />
+      <LandingPricing currentUser={currentUser} />
       <LandingFooter />
     </main>
   );

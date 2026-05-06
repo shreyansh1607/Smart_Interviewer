@@ -1,90 +1,226 @@
 "use client";
 
-import Link from "next/link";
-
-const interviewTypes = [
-  "Aptitude",
-  "Technical",
-  "HR Round",
-  "Mock DSA",
-  "Project Review",
-];
+import { useState } from "react";
+import styles from "./LandingProductPreview.module.css";
 
 export default function LandingProductPreview() {
+  const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
+
+  const features = [
+    {
+      id: 1,
+      title: "AI Interview Session",
+      description:
+        "Real-time conversation with AI Interviewer tailored to your role.",
+      icon: "📱",
+    },
+    {
+      id: 2,
+      title: "Smart Feedback",
+      description: "Get instant AI feedback with scores and improvement tips.",
+      icon: "📊",
+    },
+    {
+      id: 3,
+      title: "Performance Analytics",
+      description:
+        "Track your progress with detailed analytics and visual insights.",
+      icon: "📈",
+    },
+    {
+      id: 4,
+      title: "Question Library",
+      description:
+        "Access a wide range of curated questions by role and topic.",
+      icon: "📚",
+    },
+    {
+      id: 5,
+      title: "Resume Parsing",
+      description: "AI-powered resume analysis and optimization suggestions.",
+      icon: "📄",
+    },
+    {
+      id: 6,
+      title: "Interview Records",
+      description:
+        "Store and review all your past interview sessions and progress.",
+      icon: "🎥",
+    },
+  ];
+
   return (
-    <section id="product-preview" className="landing-section">
-      <div className="landing-shell landing-preview-layout">
-        <div className="landing-preview-copy landing-card">
-          <div className="landing-kicker">Product preview</div>
-          <h2 className="landing-heading">
-            Interview types that feel familiar, focused, and practical.
-          </h2>
-          <p className="landing-text">
-            Choose an interview style that matches your target role. Then use
-            Nexus to practice in a guided room where the AI interviewer asks,
-            adapts, and scores your answer.
-          </p>
-
-          <div className="landing-pill-row">
-            {interviewTypes.map((type) => (
-              <span key={type} className="landing-pill">
-                {type}
-              </span>
-            ))}
-          </div>
-
-          <div className="landing-note-box">
-            <div className="landing-note-box__label">What this room does</div>
-            <ul className="landing-note-box__list">
-              <li>
-                Creates a realistic interview flow for freshers and students
-              </li>
-              <li>Highlights strengths, weak spots, and improvement areas</li>
-              <li>Encourages repeated practice until confidence improves</li>
-            </ul>
-          </div>
+    <section className={styles.previewSection}>
+      {/* Header */}
+      <div className={styles.header}>
+        <div className={styles.badge}>
+          <span className={styles.badgeDot} />
+          <span className={styles.badgeText}>PROJECT PREVIEW</span>
         </div>
 
-        <div className="landing-preview-room-card landing-card">
-          <div className="landing-preview-room-card__header">
-            <div>
-              <div className="landing-preview-room-card__eyebrow">
-                Mock interview room
+        <h2 className={styles.heading}>
+          See <span className={styles.accent}>Nexus</span> in Action
+        </h2>
+
+        <p className={styles.subheading}>
+          Explore a live preview of the Nexus AI Interviewer platform
+          <br />
+          and see how it helps you prepare, practice, and improve.
+        </p>
+      </div>
+
+      {/* Main Content */}
+      <div className={styles.container}>
+        {/* Left: Features List */}
+        <div className={styles.featuresList}>
+          {features.map((feature) => (
+            <div
+              key={feature.id}
+              className={`${styles.featureItem} ${
+                hoveredFeature === feature.id ? styles.featureItemActive : ""
+              }`}
+              onMouseEnter={() => setHoveredFeature(feature.id)}
+              onMouseLeave={() => setHoveredFeature(null)}
+            >
+              <div className={styles.featureIcon}>{feature.icon}</div>
+              <div className={styles.featureContent}>
+                <h3 className={styles.featureTitle}>{feature.title}</h3>
+                <p className={styles.featureDesc}>{feature.description}</p>
               </div>
-              <h3 className="landing-preview-room-card__title">
-                AI Interviewer
-              </h3>
             </div>
-            <span className="landing-status-badge">Ready</span>
+          ))}
+        </div>
+
+        {/* Right: Preview Panel */}
+        <div className={styles.previewPanel}>
+          {/* Top Section */}
+          <div className={styles.previewTop}>
+            <div className={styles.sessionHeader}>
+              <div className={styles.headerLeft}>
+                <div className={styles.sessionBadge}>N</div>
+                <div className={styles.sessionInfo}>
+                  <div className={styles.sessionDot} />
+                  <span className={styles.sessionTitle}>
+                    AI Interview Session
+                  </span>
+                </div>
+              </div>
+              <div className={styles.sessionTime}>
+                <span>24:36</span>
+                <span className={styles.endSession}>End Session</span>
+              </div>
+            </div>
+
+            {/* Chat Messages */}
+            <div className={styles.chatArea}>
+              <div className={styles.messageUser}>
+                <span className={styles.userInitial}>👤</span>
+                <div className={styles.messageBubble}>
+                  <p>
+                    Can you walk me through a challenging project you worked on
+                    and how you overcame the main obstacles?
+                  </p>
+                  <span className={styles.timestamp}>15:32 AM</span>
+                </div>
+              </div>
+
+              <div className={styles.messageAI}>
+                <span className={styles.aiInitial}>💬</span>
+                <div className={styles.messageBubbleAI}>
+                  <p>
+                    Sure! In my last project, I was responsible for building a
+                    real-time analytics dashboard. The main challenge was
+                    handling large data streams efficiently...
+                  </p>
+                  <span className={styles.timestamp}>15:32 AM</span>
+                </div>
+              </div>
+
+              <div className={styles.inputArea}>
+                <input
+                  type="text"
+                  placeholder="Type your answer..."
+                  className={styles.input}
+                />
+                <button className={styles.sendBtn}>→</button>
+              </div>
+            </div>
           </div>
 
-          <div className="landing-preview-room-card__grid">
-            <div className="landing-room-panel">
-              <div className="landing-panel-meta">
-                <span>AI Interviewer</span>
-                <span>Question 3</span>
+          {/* Right Stats Section */}
+          <div className={styles.statsSection}>
+            {/* Overall Score */}
+            <div className={styles.scoreCard}>
+              <h4>Overall Score</h4>
+              <div className={styles.scoreCircle}>
+                <div className={styles.scoreValue}>86</div>
+                <div className={styles.scoreLabel}>/100</div>
               </div>
-              <p>
-                Describe a project you built and how you solved the hardest
-                problem in it.
-              </p>
             </div>
-            <div className="landing-room-panel">
-              <div className="landing-panel-meta">
-                <span>User panel</span>
-                <span>Live answer</span>
-              </div>
-              <p>Answer with structure, examples, and measurable results.</p>
-            </div>
-          </div>
 
-          <div className="landing-preview-room-card__footer">
-            <p>Use the button below to begin your first practice session.</p>
-            <Link href="/sign-up" className="landing-btn landing-btn--primary">
-              Start Call
-            </Link>
+            {/* Strengths */}
+            <div className={styles.strengthsCard}>
+              <h4>Strengths</h4>
+              <div className={styles.strengthItem}>
+                <span className={styles.strengthName}>Problem Solving</span>
+                <span className={styles.strengthPercent}>90%</span>
+              </div>
+              <div className={styles.strengthBar}>
+                <div
+                  className={styles.strengthBarFill}
+                  style={{ width: "90%" }}
+                />
+              </div>
+
+              <div className={styles.strengthItem}>
+                <span className={styles.strengthName}>Communication</span>
+                <span className={styles.strengthPercent}>85%</span>
+              </div>
+              <div className={styles.strengthBar}>
+                <div
+                  className={styles.strengthBarFill}
+                  style={{ width: "85%" }}
+                />
+              </div>
+
+              <div className={styles.strengthItem}>
+                <span className={styles.strengthName}>Technical Skills</span>
+                <span className={styles.strengthPercent}>82%</span>
+              </div>
+              <div className={styles.strengthBar}>
+                <div
+                  className={styles.strengthBarFill}
+                  style={{ width: "82%" }}
+                />
+              </div>
+            </div>
+
+            {/* Speaking Pace */}
+            <div className={styles.paceCard}>
+              <h4>Speaking Pace</h4>
+              <div className={styles.paceValue}>
+                142 <span>WPM</span>
+              </div>
+              <div className={styles.paceSlider}>
+                <div className={styles.paceTrack} />
+                <div className={styles.paceDot} />
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* CTA Buttons */}
+      <div className={styles.ctaSection}>
+        <button className={styles.primaryBtn}>
+          Try Nexus Now
+          <span className={styles.arrow}>→</span>
+        </button>
+        <button className={styles.secondaryBtn}>
+          <span className={styles.playIcon}>▶</span>
+          Watch Demo
+        </button>
+        <p className={styles.disclaimer}>No credit card required</p>
       </div>
     </section>
   );

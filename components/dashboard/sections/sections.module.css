@@ -1,0 +1,101 @@
+/* --- My Interviews Table Styles --- */
+.interviewsTableWrapper {
+	background: #101624;
+	border-radius: 18px;
+	padding: 32px 24px;
+	box-shadow: 0 2px 24px 0 rgba(0,0,0,0.12);
+	margin-top: 24px;
+}
+
+.interviewsTable {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	font-size: 1rem;
+	color: #e5e7ef;
+}
+
+.interviewsTable th, .interviewsTable td {
+	padding: 16px 12px;
+	text-align: left;
+}
+
+.interviewsTable th {
+	font-weight: 700;
+	color: #b6b9d6;
+	background: #151b2c;
+	border-bottom: 1px solid #232a3e;
+}
+
+.interviewsTable tr {
+	transition: background 0.15s;
+}
+.interviewsTable tr:hover {
+	background: #181f33;
+}
+
+.badge {
+	display: inline-block;
+	padding: 4px 12px;
+	border-radius: 999px;
+	font-size: 0.92em;
+	font-weight: 600;
+	background: #232a3e;
+	color: #a855f7;
+}
+.badge.completed {
+	background: #1e2e1e;
+	color: #4ade80;
+}
+.badge.inprogress {
+	background: #2a2323;
+	color: #fbbf24;
+}
+.badge.medium {
+	background: #232a3e;
+	color: #fbbf24;
+}
+.badge.hard {
+	background: #232a3e;
+	color: #f87171;
+}
+.badge.easy {
+	background: #232a3e;
+	color: #60a5fa;
+}
+.badge.expert {
+	background: #232a3e;
+	color: #a855f7;
+}
+
+.score {
+	font-weight: 700;
+	font-size: 1.1em;
+	color: #4ade80;
+}
+.score.incomplete {
+	color: #b6b9d6;
+}
+
+.actions {
+	display: flex;
+	gap: 8px;
+}
+.actionBtn {
+	background: #181f33;
+	border: none;
+	border-radius: 8px;
+	padding: 8px 10px;
+	color: #a855f7;
+	cursor: pointer;
+	transition: background 0.15s;
+}
+.actionBtn:hover {
+	background: #232a3e;
+}
+.icon-eye {
+	color: #60a5fa;
+}
+.icon-play {
+	color: #4ade80;
+}

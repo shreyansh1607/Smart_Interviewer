@@ -1,0 +1,28 @@
+/* ─── Dashboard Layout ───────────────────────────────────────── */
+
+.dashboardContainer {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* prevent outer scroll */
+  background: linear-gradient(135deg, #0a0e1a 0%, #0f1527 50%, #0a0e1a 100%);
+  margin: 0;
+  padding: 0;
+}
+
+.dashboardMain {
+  flex: 1;
+  margin-left: 220px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .dashboardMain {
+    margin-left: 0;
+    width: 100vw;
+  }
+}

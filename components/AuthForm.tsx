@@ -6,7 +6,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { auth } from "@/firebase/client";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -32,7 +32,11 @@ const authFormSchema = (type: FormType) => {
 
 const AuthForm = ({ type }: { type: FormType }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [googleLoading, setGoogleLoading] = useState(false);
+
+  const plan = searchParams.get("plan");
+  const billing = searchParams.get("billing") as "monthly" | "yearly" | null;
 
   const formSchema = authFormSchema(type);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -68,7 +72,11 @@ const AuthForm = ({ type }: { type: FormType }) => {
         }
 
         toast.success("Account created successfully. Please sign in.");
-        router.push("/sign-in");
+        if (plan) {
+          router.push(`/sign-in?plan=${encodeURIComponent(plan)}${billing ? `&billing=${billing}` : ""}`);
+        } else {
+          router.push("/sign-in");
+        }
       } else {
         const { email, password } = data;
 
@@ -97,7 +105,12 @@ const AuthForm = ({ type }: { type: FormType }) => {
         }
 
         toast.success("Signed in successfully.");
-        router.push("/");
+        if (plan) {
+          router.push(`/price?plan=${encodeURIComponent(plan)}${billing ? `&billing=${billing}` : ""}`);
+        } else {
+          router.push("/");
+        }
+        router.refresh();
       }
     } catch (error) {
       console.log(error);
@@ -130,7 +143,11 @@ const AuthForm = ({ type }: { type: FormType }) => {
       }
 
       toast.success("Signed in with Google.");
-      router.push("/");
+      if (plan) {
+        router.push(`/price?plan=${encodeURIComponent(plan)}${billing ? `&billing=${billing}` : ""}`);
+      } else {
+        router.push("/");
+      }
       router.refresh();
     } catch (error) {
       console.log(error);
@@ -187,8 +204,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
             <FormField
               control={form.control}
               name="email"
-                label="Email address"
-                placeholder="you@example.com"
+              label="Email address"
+              placeholder="you@example.com"
               type="email"
             />
 
@@ -198,12 +215,17 @@ const AuthForm = ({ type }: { type: FormType }) => {
               label="Password"
               labelAction={
                 isSignIn ? (
-                  <Link href="/forgot-password" className="auth-form__forgot-link">
+                  <Link
+                    href="/forgot-password"
+                    className="auth-form__forgot-link"
+                  >
                     Forgot password?
                   </Link>
                 ) : undefined
               }
-              placeholder={isSignIn ? "Enter your password" : "Create a password"}
+              placeholder={
+                isSignIn ? "Enter your password" : "Create a password"
+              }
               type="password"
             />
 

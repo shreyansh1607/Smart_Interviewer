@@ -92,7 +92,7 @@ export default function LandingFooter() {
             © {year} Nexus. All rights reserved.
           </div>
           <div className="landing-footer__meta">
-            Built for candidates, students, and teams preparing for interviews.
+            Made in India <span className="landing-footer__heart">❤️</span>
           </div>
         </div>
       </div>

@@ -3,23 +3,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/actions/auth.action";
+import styles from "./auth.module.css";
 
 const AuthLayout = async ({ children }: { children: ReactNode }) => {
   const loggedIn = await isAuthenticated();
   if (loggedIn) redirect("/");
 
   return (
-    <div className="auth-layout">
-      <div className="auth-layout__ambient" aria-hidden />
-      <header className="auth-layout__topbar">
-        <Link href="/" className="auth-layout__brand">
+    <div className={styles.authLayout}>
+      <div className={styles.authLayoutAmbient} aria-hidden />
+      <header className={styles.authLayoutTopbar}>
+        <Link href="/" className={styles.authLayoutBrand}>
           <Image src="/icon.svg" alt="Nexus logo" width={28} height={28} />
           <span>NEXUS</span>
         </Link>
       </header>
-      <div className="auth-layout__shell">
-        <aside className="auth-layout__content">
-          <span className="auth-layout__badge">WELCOME TO NEXUS</span>
+      <div className={styles.authLayoutShell}>
+        <aside className={styles.authLayoutContent}>
+          <span className={styles.authLayoutBadge}>WELCOME TO NEXUS</span>
           <h1>
             AI-Powered Interviews.
             <br />
@@ -30,23 +31,25 @@ const AuthLayout = async ({ children }: { children: ReactNode }) => {
             role.
           </p>
 
-          <div className="auth-layout__feature-list">
-            <div className="auth-layout__feature-item">
-              <span className="auth-layout__feature-icon">⚡</span>
+          <div className={styles.authLayoutFeatureList}>
+            <div className={styles.authLayoutFeatureItem}>
+              <span className={styles.authLayoutFeatureIcon}>⚡</span>
               <div>
                 <h4>AI-Powered Feedback</h4>
                 <p>Get smarter insights that help you improve faster.</p>
               </div>
             </div>
-            <div className="auth-layout__feature-item">
-              <span className="auth-layout__feature-icon">◎</span>
+            <div className={styles.authLayoutFeatureItem}>
+              <span className={styles.authLayoutFeatureIcon}>◎</span>
               <div>
                 <h4>Realistic Mock Interviews</h4>
-                <p>Experience real interview scenarios tailored to your goals.</p>
+                <p>
+                  Experience real interview scenarios tailored to your goals.
+                </p>
               </div>
             </div>
-            <div className="auth-layout__feature-item">
-              <span className="auth-layout__feature-icon">↗</span>
+            <div className={styles.authLayoutFeatureItem}>
+              <span className={styles.authLayoutFeatureIcon}>↗</span>
               <div>
                 <h4>Track & Improve</h4>
                 <p>Analyze your performance and grow with every session.</p>
@@ -54,7 +57,7 @@ const AuthLayout = async ({ children }: { children: ReactNode }) => {
             </div>
           </div>
 
-          <div className="auth-layout__testimonial">
+          <div className={styles.authLayoutTestimonial}>
             <p>
               Nexus helped me build confidence and crack my dream job at Google.
             </p>
@@ -62,9 +65,9 @@ const AuthLayout = async ({ children }: { children: ReactNode }) => {
             <span>Software Engineer</span>
           </div>
         </aside>
-        <section className="auth-layout__form-panel">{children}</section>
+        <section className={styles.authLayoutFormPanel}>{children}</section>
       </div>
-      <div className="auth-layout__security">
+      <div className={styles.authLayoutSecurity}>
         <strong>Your data is safe with us</strong>
         <span>Secure · Private · Trusted</span>
       </div>
